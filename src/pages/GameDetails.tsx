@@ -6,8 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Play,
-  BookmarkCheck,
-  Plus,
+  BookmarkCheck
 } from "lucide-react";
 import {
   FaPlaystation,
@@ -168,7 +167,7 @@ function GameDetails() {
 
           <button
             onClick={handleLibraryToggle}
-            className={`flex items-center justify-center gap-2 py-4 px-8 w-96 font-semibold transition-all cursor-pointer rounded-md border ${
+            className={`flex items-center justify-center gap-2 py-4 px-8 w-96 font-medium font-heading transition-all cursor-pointer rounded-md border ${
               currentLibraryEntry
                 ? "bg-secondary text-foreground border-border hover:bg-destructive hover:text-white hover:border-destructive group"
                 : "bg-primary text-primary-foreground border-transparent hover:opacity-90"
@@ -186,7 +185,6 @@ function GameDetails() {
               </>
             ) : (
               <>
-                <Plus size={18} />
                 <span>Add to Library</span>
               </>
             )}

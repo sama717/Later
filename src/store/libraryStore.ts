@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { supabase } from "../lib/supabase";
+import { toast } from "sonner";
 import type { RawgGame, RawgGameDetails } from "../lib/rawg";
 
 export interface LibraryEntry {
-  user_id: string; 
+  user_id: string;
   status: "backlog" | "played";
-  game_id: number; 
+  game_id: number;
   game: RawgGame & Partial<RawgGameDetails>;
 }
 
@@ -33,6 +34,7 @@ export const useLibraryStore = create<LibraryState>((set) => ({
 
     if (error) {
       console.error("Fetch Error:", error);
+      toast.error("Failed to load your library.");
     } else {
       const mappedEntries = (data || []).map((item) => ({
         user_id: item.user_id,
@@ -45,28 +47,30 @@ export const useLibraryStore = create<LibraryState>((set) => ({
     set({ isLoading: false });
   },
 
-addToLibrary: async (userId, game) => {
-  const { error } = await supabase
-    .from("library")
-    .upsert(
-      {
-        user_id: userId,
-        game_id: game.id,
-        status: "backlog",
-        game_data: game,
-      },
-      { onConflict: 'user_id, game_id' }
-    );
+  addToLibrary: async (userId, game) => {
+    const { error } = await supabase
+      .from("library")
+      .upsert(
+        {
+          user_id: userId,
+          game_id: game.id,
+          status: "backlog",
+          game_data: game,
+        },
+        { onConflict: 'user_id, game_id' }
+      );
 
-  if (!error) {
-    set((state) => ({
-      entries: [...state.entries.filter((e) => e.game_id !== game.id), 
-                { user_id: userId, status: "backlog", game_id: game.id, game }],
-    }));
-  } else {
-    console.error("Error adding to library:", error.message);
-  }
-},
+    if (!error) {
+      toast.success(`${game.name} added to your library!`);
+      set((state) => ({
+        entries: [...state.entries.filter((e) => e.game_id !== game.id), 
+                  { user_id: userId, status: "backlog", game_id: game.id, game }],
+      }));
+    } else {
+      toast.error("Failed to add game to library.");
+      console.error("Error adding to library:", error.message);
+    }
+  },
 
   removeFromLibrary: async (userId, gameId) => {
     const { error } = await supabase
@@ -76,9 +80,12 @@ addToLibrary: async (userId, game) => {
       .eq("game_id", gameId);
 
     if (!error) {
+      toast.info("Game removed from library.");
       set((state) => ({
         entries: state.entries.filter((e) => !(e.user_id === userId && e.game_id === gameId)),
       }));
+    } else {
+      toast.error("Failed to remove game.");
     }
   },
 
@@ -90,11 +97,14 @@ addToLibrary: async (userId, game) => {
       .eq("game_id", gameId);
 
     if (!error) {
+      toast.success("Game marked as played!");
       set((state) => ({
         entries: state.entries.map((e) =>
           e.user_id === userId && e.game_id === gameId ? { ...e, status: "played" } : e
         ),
       }));
+    } else {
+      toast.error("Failed to update status.");
     }
   },
 
@@ -106,11 +116,14 @@ addToLibrary: async (userId, game) => {
       .eq("game_id", gameId);
 
     if (!error) {
+      toast.success("Game moved to backlog.");
       set((state) => ({
         entries: state.entries.map((e) =>
           e.user_id === userId && e.game_id === gameId ? { ...e, status: "backlog" } : e
         ),
       }));
+    } else {
+      toast.error("Failed to update status.");
     }
   },
 
