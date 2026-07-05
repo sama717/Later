@@ -3,8 +3,10 @@ import { useLibraryStore } from "../store/libraryStore";
 import { useMemo } from "react";
 import { Link } from "react-router";
 import { Gamepad2, CheckCircle2, Calendar, Mail } from "lucide-react";
+import { useTitle } from "@/hooks/useTitle";
 
 function Profile() {
+    useTitle("Profile");
   const { session, isLoading } = useSession();
   const entries = useLibraryStore((s) => s.entries);
 

@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Play,
-  BookmarkCheck
+  BookmarkCheck,
 } from "lucide-react";
 import {
   FaPlaystation,
@@ -32,6 +32,7 @@ import type {
 import { GameCard } from "../components/GameCard";
 import { useSession } from "../hooks/useSession";
 import { useLibraryStore } from "../store/libraryStore";
+import { useTitle } from "@/hooks/useTitle";
 
 const getPlatformIcon = (slug: string) => {
   switch (slug) {
@@ -63,6 +64,7 @@ function GameDetails() {
   const removeFromLibrary = useLibraryStore((s) => s.removeFromLibrary);
 
   const [game, setGame] = useState<RawgGameDetails | null>(null);
+  useTitle(`${game?.name}`);
   const [screenshots, setScreenshots] = useState<RawgScreenshot[]>([]);
   const [trailers, setTrailers] = useState<RawgTrailer[]>([]);
   const [suggested, setSuggested] = useState<RawgGame[]>([]);
@@ -138,7 +140,6 @@ function GameDetails() {
       addToLibrary(session.user.id, game);
     }
   };
-
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 pt-8 pb-40 bg-background text-foreground min-h-screen">

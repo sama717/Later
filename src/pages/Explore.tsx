@@ -6,6 +6,7 @@ import ExploreSidebar, { ALL_PLATFORMS, ALL_GENRES } from "../components/Explore
 import { GameCard, GameCardSkeleton } from "../components/GameCard";
 import { useDebounce } from "../hooks/useDebounce";
 import { useState } from "react";
+import { useTitle } from "../hooks/useTitle"; 
 
 const SORT_OPTIONS = [
   { label: "Popularity", value: "-added" },
@@ -17,6 +18,7 @@ const SORT_OPTIONS = [
 const PAGE_SIZE = 12;
 
 function Explore() {
+  useTitle("Explore");
   const [searchParams, setSearchParams] = useSearchParams();
   
   const page = parseInt(searchParams.get("page") || "1");

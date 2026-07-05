@@ -7,8 +7,10 @@ import { useAuth } from "../hooks/useAuth";
 import AuthLayout from "../components/AuthLayout";
 import { registerSchema, type RegisterFormValues } from "../lib/authSchemas";
 import registerBg from "../assets/register-bg.gif";
+import { useTitle } from "@/hooks/useTitle";
 
 function Register() {
+    useTitle("Register");
   const navigate = useNavigate();
   const { signUpWithPassword, signInWithGoogle, isSubmitting, error } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
