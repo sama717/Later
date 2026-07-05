@@ -1,34 +1,33 @@
 import { createBrowserRouter } from "react-router";
+import { lazy, Suspense } from "react";
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
-// import About from "./pages/About";
-import Explore from "./pages/Explore";
-import Library from "./pages/Library";
-import GameDetail from "./pages/GameDetails";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile"; 
-import NotFound from "./pages/NotFound";
+import { Loading } from "./components/Loading";
 
-const router = createBrowserRouter([
+const Home = lazy(() => import("./pages/Home"));
+const Explore = lazy(() => import("./pages/Explore"));
+const Library = lazy(() => import("./pages/Library"));
+const GameDetail = lazy(() => import("./pages/GameDetails"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Profile = lazy(() => import("./pages/Profile"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-        { index: true, element: <Home /> },
-      //   { path: "about", element: <About /> },
-        { path: "explore", element: <Explore /> },
-        { path: "library", element: <Library /> },
-        { path: "games/:id", element: <GameDetail /> },
-        { path: "login", element: <Login /> },
-        { path: "register", element: <Register /> },
-        { path: "profile", element: <Profile /> }, 
+      { index: true, element: <Suspense fallback={<Loading />}><Home /></Suspense> },
+      { path: "explore", element: <Suspense fallback={<Loading />}><Explore /></Suspense> },
+      { path: "library", element: <Suspense fallback={<Loading />}><Library /></Suspense> },
+      { path: "games/:id", element: <Suspense fallback={<Loading />}><GameDetail /></Suspense> },
+      { path: "login", element: <Suspense fallback={<Loading />}><Login /></Suspense> },
+      { path: "register", element: <Suspense fallback={<Loading />}><Register /></Suspense> },
+      { path: "profile", element: <Suspense fallback={<Loading />}><Profile /></Suspense> },
     ],
   },
   {
     path: "*",
-    element: <NotFound />, 
+    element: <NotFound />,
   },
 ]);
-
-export default router;
