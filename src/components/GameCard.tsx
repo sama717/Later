@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router"; // 1. Import useNavigate
 import { ArrowUpRight, Star } from "lucide-react";
 import type { RawgGame } from "../lib/rawg";
 import { getAgeBadgeClass, getAgeBadgeLabel } from "../lib/esrb";
@@ -8,9 +9,15 @@ interface GameCardProps {
 }
 
 function GameCard({ game, variant = "grid" }: GameCardProps) {
+  const navigate = useNavigate(); 
+
   const genreText =
     game.genres.slice(0, 2).map((g) => g.name).join(", ") || "Uncategorized";
   const extraGenres = game.genres.length > 2 ? ` +${game.genres.length - 2} More` : "";
+
+  const handleViewDetails = () => {
+    navigate(`/game/${game.id}`); 
+  };
 
   if (variant === "list") {
     return (
@@ -28,7 +35,7 @@ function GameCard({ game, variant = "grid" }: GameCardProps) {
           <div className="flex items-center gap-3">
             <h3 className="font-medium text-lg truncate min-w-0">{game.name}</h3>
             <span
-              className={`shrink-0 px-2.5 py-1 rounded-[6px] text-sm font-medium text-white ${getAgeBadgeClass(
+              className={`shrink-0 px-2.5 py-1 rounded-[8px] text-sm font-medium text-white ${getAgeBadgeClass(
                 game.esrb_rating
               )}`}
             >
@@ -54,7 +61,7 @@ function GameCard({ game, variant = "grid" }: GameCardProps) {
           <button
             className="w-10 h-10 flex items-center justify-center border-2 border-border hover:bg-accent transition-colors cursor-pointer"
             aria-label={`View ${game.name} details`}
-            onClick={() => { /* TODO: navigate to detail page */ }}
+            onClick={handleViewDetails}
           >
             <ArrowUpRight size={18} />
           </button>
@@ -77,7 +84,7 @@ function GameCard({ game, variant = "grid" }: GameCardProps) {
       <div className="flex items-center justify-between gap-3 mt-4">
         <h3 className="font-medium text-xl truncate min-w-0">{game.name}</h3>
         <span
-          className={`shrink-0 px-2.5 py-1 rounded-[6px] text-[0.8rem] font-medium text-white ${getAgeBadgeClass(
+          className={`shrink-0 px-2.5 py-1 rounded-[8px] text-[0.8rem] font-medium text-white ${getAgeBadgeClass(
             game.esrb_rating
           )}`}
         >
@@ -102,7 +109,7 @@ function GameCard({ game, variant = "grid" }: GameCardProps) {
         <button
           className="w-12 h-12 flex items-center justify-center border-2 border-border hover:bg-accent transition-colors cursor-pointer"
           aria-label={`View ${game.name} details`}
-          onClick={() => { /* TODO: navigate to detail page */ }}
+          onClick={handleViewDetails} 
         >
           <ArrowUpRight size={20} />
         </button>

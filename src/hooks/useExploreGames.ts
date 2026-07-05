@@ -4,6 +4,7 @@ import type { RawgGame } from "../lib/rawg";
 
 export interface ExploreFilters {
   search: string;
+  searchPrecise?: boolean; 
   genre: string | null;
   parentPlatform: string | null;
   ordering: string;
@@ -27,13 +28,17 @@ export function useExploreGames(filters: ExploreFilters): UseExploreGamesResult 
 
   useEffect(() => {
     let cancelled = false;
-    setIsLoading(true);
-    setError(null);
 
     const timeout = setTimeout(async () => {
       try {
+        if (!cancelled) {
+          setIsLoading(true);
+          setError(null);
+        }
+
         const data = await fetchGamesList({
           search: filters.search || undefined,
+          searchPrecise: filters.searchPrecise, 
           genres: filters.genre ?? undefined,
           parentPlatforms: filters.parentPlatform ?? undefined,
           ordering: filters.ordering,
@@ -62,7 +67,14 @@ export function useExploreGames(filters: ExploreFilters): UseExploreGamesResult 
       cancelled = true;
       clearTimeout(timeout);
     };
-  }, [filters.search, filters.genre, filters.parentPlatform, filters.ordering, filters.page]);
+  }, [
+    filters.search, 
+    filters.searchPrecise, 
+    filters.genre, 
+    filters.parentPlatform, 
+    filters.ordering, 
+    filters.page
+  ]);
 
   return { games, totalCount, isLoading, error };
 }
