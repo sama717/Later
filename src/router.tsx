@@ -5,8 +5,8 @@ import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 // import Library from "./pages/Library";
 import GameDetail from "./pages/GameDetails";
-// import Login from "./pages/Login";
-// import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
         { path: "explore", element: <Explore /> },
       //   { path: "library", element: <Library /> },
         { path: "game/:id", element: <GameDetail /> },
-      //   { path: "login", element: <Login /> },
-      //   { path: "register", element: <Register /> },
+        { path: "login", element: <Login /> },
+        { path: "register", element: <Register /> },
     ],
   },
   {
