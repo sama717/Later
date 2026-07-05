@@ -1,0 +1,149 @@
+import { ArrowUpRight, Star } from "lucide-react";
+import type { RawgGame } from "../lib/rawg";
+import { getAgeBadgeClass, getAgeBadgeLabel } from "../lib/esrb";
+
+interface GameCardProps {
+  game: RawgGame;
+  variant?: "grid" | "list";
+}
+
+function GameCard({ game, variant = "grid" }: GameCardProps) {
+  const genreText =
+    game.genres.slice(0, 2).map((g) => g.name).join(", ") || "Uncategorized";
+  const extraGenres = game.genres.length > 2 ? ` +${game.genres.length - 2} More` : "";
+
+  if (variant === "list") {
+    return (
+      <div className="flex gap-4 items-center py-4 border-b border-border">
+        <div className="w-40 sm:w-48 aspect-video overflow-hidden bg-secondary shrink-0">
+          <img
+            src={game.background_image}
+            alt={game.name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3">
+            <h3 className="font-medium text-lg truncate min-w-0">{game.name}</h3>
+            <span
+              className={`shrink-0 px-2.5 py-1 rounded-[6px] text-sm font-medium text-white ${getAgeBadgeClass(
+                game.esrb_rating
+              )}`}
+            >
+              {getAgeBadgeLabel(game.esrb_rating)}
+            </span>
+          </div>
+
+          <p className="text-muted-foreground text-sm mt-1 truncate">
+            {genreText}
+            {extraGenres}
+          </p>
+
+          <div className="flex items-center gap-1.5 mt-1">
+            <Star size={14} className="fill-chart-3 text-chart-3" />
+            <span className="text-sm font-medium">{game.rating.toFixed(1)}</span>
+          </div>
+        </div>
+
+        <div className="flex gap-2 shrink-0">
+          <button className="h-10 px-5 bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity cursor-pointer">
+            Add to Library
+          </button>
+          <button
+            className="w-10 h-10 flex items-center justify-center border-2 border-border hover:bg-accent transition-colors cursor-pointer"
+            aria-label={`View ${game.name} details`}
+            onClick={() => { /* TODO: navigate to detail page */ }}
+          >
+            <ArrowUpRight size={18} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="w-full aspect-video overflow-hidden bg-secondary">
+        <img
+          src={game.background_image}
+          alt={game.name}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+
+      <div className="flex items-center justify-between gap-3 mt-4">
+        <h3 className="font-medium text-xl truncate min-w-0">{game.name}</h3>
+        <span
+          className={`shrink-0 px-2.5 py-1 rounded-[6px] text-[0.8rem] font-medium text-white ${getAgeBadgeClass(
+            game.esrb_rating
+          )}`}
+        >
+          {getAgeBadgeLabel(game.esrb_rating)}
+        </span>
+      </div>
+
+      <p className="text-muted-foreground mt-1 truncate text-[0.9rem]">
+        {genreText}
+        {extraGenres}
+      </p>
+
+      <div className="flex items-center gap-1.5 mt-1">
+        <Star size={16} className="fill-chart-3 text-chart-3" />
+        <span className="font-medium">{game.rating.toFixed(1)}</span>
+      </div>
+
+      <div className="flex gap-3 mt-12">
+        <button className="flex-1 h-12 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity cursor-pointer">
+          Add to Library
+        </button>
+        <button
+          className="w-12 h-12 flex items-center justify-center border-2 border-border hover:bg-accent transition-colors cursor-pointer"
+          aria-label={`View ${game.name} details`}
+          onClick={() => { /* TODO: navigate to detail page */ }}
+        >
+          <ArrowUpRight size={20} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function GameCardSkeleton({ variant = "grid" }: { variant?: "grid" | "list" }) {
+  if (variant === "list") {
+    return (
+      <div className="flex gap-4 items-center py-4 border-b border-border animate-pulse">
+        <div className="w-40 sm:w-48 aspect-video bg-secondary shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="h-5 w-1/3 bg-secondary" />
+          <div className="h-4 w-1/4 mt-2 bg-secondary" />
+          <div className="h-4 w-16 mt-2 bg-secondary" />
+        </div>
+        <div className="flex gap-2 shrink-0">
+          <div className="h-10 w-32 bg-secondary" />
+          <div className="h-10 w-10 bg-secondary" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="animate-pulse">
+      <div className="w-full aspect-video bg-secondary" />
+      <div className="flex items-center justify-between mt-4">
+        <div className="h-5 w-2/3 bg-secondary" />
+        <div className="h-6 w-10 bg-secondary" />
+      </div>
+      <div className="h-4 w-1/3 mt-2 bg-secondary" />
+      <div className="h-4 w-16 mt-2 bg-secondary" />
+      <div className="flex gap-3 mt-4">
+        <div className="flex-1 h-12 bg-secondary" />
+        <div className="w-12 h-12 bg-secondary" />
+      </div>
+    </div>
+  );
+}
+
+export { GameCard, GameCardSkeleton };

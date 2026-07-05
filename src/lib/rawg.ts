@@ -101,3 +101,49 @@ export async function fetchTopGameForGenre(
   const data: RawgListResponse = await response.json();
   return data.results[0] ?? null;
 }
+
+export interface FetchGamesListParams {
+  search?: string;
+  genres?: string;
+  searchPrecise?: boolean;
+  parentPlatforms?: string;
+  ordering?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface RawgPaginatedResponse {
+  count: number;
+  results: RawgGame[];
+}
+
+export async function fetchGamesList(
+  params: FetchGamesListParams
+): Promise<RawgPaginatedResponse> {
+  if (!API_KEY) {
+    throw new RawgApiError("Missing VITE_RAWG_API_KEY in environment");
+  }
+
+  const searchParams = new URLSearchParams({ key: API_KEY });
+  if (params.search) searchParams.set("search", params.search);
+  if (params.search && params.searchPrecise) {
+    searchParams.set("search_precise", "true"); 
+  }
+  if (params.genres) searchParams.set("genres", params.genres);
+  if (params.parentPlatforms)
+    searchParams.set("parent_platforms", params.parentPlatforms);
+  searchParams.set("ordering", params.ordering ?? "-added");
+  searchParams.set("page", String(params.page ?? 1));
+  searchParams.set("page_size", String(params.pageSize ?? 12));
+
+  const response = await fetch(`${RAWG_BASE_URL}/games?${searchParams}`);
+
+  if (!response.ok) {
+    throw new RawgApiError(
+      `Failed to fetch games: ${response.statusText}`,
+      response.status
+    );
+  }
+
+  return response.json();
+}
