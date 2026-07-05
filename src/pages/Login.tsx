@@ -7,8 +7,10 @@ import { useAuth } from "../hooks/useAuth";
 import AuthLayout from "../components/AuthLayout";
 import { loginSchema, type LoginFormValues } from "../lib/authSchemas";
 import loginBg from "../assets/login-bg.gif";
+import { useTitle } from "@/hooks/useTitle";
 
 function Login() {
+    useTitle("Login");
   const navigate = useNavigate();
   const { signInWithPassword, signInWithGoogle, isSubmitting, error } = useAuth();
   const [showPassword, setShowPassword] = useState(false);

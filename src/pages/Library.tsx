@@ -5,8 +5,10 @@ import { useLibraryStore } from "../store/libraryStore";
 import { getAgeBadgeClass, getAgeBadgeLabel } from "../lib/esrb";
 import { useEffect, useMemo, useState } from "react";
 import { GameCard } from "../components/GameCard";
+import { useTitle } from "@/hooks/useTitle";
 
 function Library() {
+    useTitle("Library");
   const { session, isLoading } = useSession();
   const [activeTab, setActiveTab] = useState<"backlog" | "played">("backlog");
   const fetchLibrary = useLibraryStore((s) => s.fetchLibrary);
