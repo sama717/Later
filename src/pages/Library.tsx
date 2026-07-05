@@ -3,31 +3,38 @@ import { LayoutGrid, List, Trash2 } from "lucide-react";
 import { useSession } from "../hooks/useSession";
 import { useLibraryStore } from "../store/libraryStore";
 import { getAgeBadgeClass, getAgeBadgeLabel } from "../lib/esrb";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GameCard } from "../components/GameCard";
 
 function Library() {
   const { session, isLoading } = useSession();
   const [activeTab, setActiveTab] = useState<"backlog" | "played">("backlog");
+  const fetchLibrary = useLibraryStore((s) => s.fetchLibrary);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const entries = useLibraryStore((s) => s.entries);
 
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchLibrary(session.user.id);
+    }
+  }, [session?.user?.id, fetchLibrary]);
+
   const backlogEntries = useMemo(
-    () =>
-      session
-        ? entries.filter(
-            (e) => e.userId === session.user.id && e.status === "backlog",
-          )
-        : [],
-    [entries, session],
-  );
+  () =>
+    session
+      ? entries.filter(
+          (e) => e.user_id === session.user.id && e.status === "backlog", 
+        )
+      : [],
+  [entries, session],
+);
 
   const playedEntries = useMemo(
     () =>
       session
         ? entries.filter(
-            (e) => e.userId === session.user.id && e.status === "played",
+            (e) => e.user_id === session.user.id && e.status === "played",
           )
         : [],
     [entries, session],

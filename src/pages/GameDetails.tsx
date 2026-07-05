@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
-import { 
-  ArrowLeft, 
-  Star, 
-  ChevronLeft, 
-  ChevronRight, 
-  Play, 
-  BookmarkCheck, 
-  Plus 
+import {
+  ArrowLeft,
+  Star,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  BookmarkCheck
 } from "lucide-react";
 import {
   FaPlaystation,
@@ -72,7 +71,7 @@ function GameDetails() {
   const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
   const currentLibraryEntry = entries.find(
-    (e) => e.userId === session?.user?.id && e.game.id.toString() === id
+    (e) => e.user_id === session?.user?.id && e.game_id.toString() === id,
   );
 
   useEffect(() => {
@@ -166,10 +165,10 @@ function GameDetails() {
             <span>{game.esrb_rating?.name || "17+"}</span>
           </div>
 
-          <button 
+          <button
             onClick={handleLibraryToggle}
-            className={`flex items-center justify-center gap-2 py-4 px-8 w-96 font-semibold transition-all cursor-pointer rounded-md border ${
-              currentLibraryEntry 
+            className={`flex items-center justify-center gap-2 py-4 px-8 w-96 font-medium font-heading transition-all cursor-pointer rounded-md border ${
+              currentLibraryEntry
                 ? "bg-secondary text-foreground border-border hover:bg-destructive hover:text-white hover:border-destructive group"
                 : "bg-primary text-primary-foreground border-transparent hover:opacity-90"
             }`}
@@ -177,12 +176,15 @@ function GameDetails() {
             {currentLibraryEntry ? (
               <>
                 <BookmarkCheck size={18} className="group-hover:hidden" />
-                <span className="group-hover:hidden">In Library ({currentLibraryEntry.status})</span>
-                <span className="hidden group-hover:inline">Remove From Library</span>
+                <span className="group-hover:hidden">
+                  In Library ({currentLibraryEntry.status})
+                </span>
+                <span className="hidden group-hover:inline">
+                  Remove From Library
+                </span>
               </>
             ) : (
               <>
-                <Plus size={18} />
                 <span>Add to Library</span>
               </>
             )}
@@ -391,7 +393,7 @@ function GameDetails() {
             <button
               onClick={() =>
                 setLightboxIndex((prev) =>
-                  prev !== null && prev > 0 ? prev - 1 : screenshots.length - 1
+                  prev !== null && prev > 0 ? prev - 1 : screenshots.length - 1,
                 )
               }
               className="absolute left-6 text-white hover:text-muted-foreground z-10 p-3 bg-black/50 cursor-pointer rounded-sm"
@@ -410,7 +412,7 @@ function GameDetails() {
             <button
               onClick={() =>
                 setLightboxIndex((prev) =>
-                  prev !== null && prev < screenshots.length - 1 ? prev + 1 : 0
+                  prev !== null && prev < screenshots.length - 1 ? prev + 1 : 0,
                 )
               }
               className="absolute right-6 text-white hover:text-muted-foreground z-10 p-3 bg-black/50 cursor-pointer rounded-sm"

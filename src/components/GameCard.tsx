@@ -16,7 +16,7 @@ function GameCard({ game, variant = "grid", hideFooter = false }: GameCardProps)
   const { session } = useSession();
   const entries = useLibraryStore((s) => s.entries);
   const entry = session
-    ? entries.find((e) => e.userId === session.user.id && e.game.id === game.id)
+    ? entries.find((e) => e.user_id === session.user.id && e.game.id === game.id)
     : undefined;
   const addToLibrary = useLibraryStore((s) => s.addToLibrary);
 
