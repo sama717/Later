@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
+import { User } from "lucide-react";
 
 interface UserMenuProps {
   session: Session;
@@ -47,6 +48,13 @@ function UserMenu({ session }: UserMenuProps) {
           <div className="px-4 py-3 border-b border-border">
             <p className="text-sm text-muted-foreground truncate">{email}</p>
           </div>
+          <Link
+            to="/profile"
+            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
+          >
+            <User size={16} />
+            <span>View Profile</span>
+          </Link>
           <button
             onClick={handleLogout}
             className="w-full text-left px-4 py-3 text-sm font-medium hover:bg-accent transition-colors cursor-pointer text-accent-grad-start"
