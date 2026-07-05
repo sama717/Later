@@ -11,7 +11,7 @@ function Profile() {
   const stats = useMemo(() => {
     if (!session) return { backlog: 0, played: 0, total: 0 };
     
-    const userEntries = entries.filter((e) => e.userId === session.user.id);
+    const userEntries = entries.filter((e) => e.user_id === session.user.id);
     const backlog = userEntries.filter((e) => e.status === "backlog").length;
     const played = userEntries.filter((e) => e.status === "played").length;
     
